@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Wack-a-Mole Game</title>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
+	<style>
+		body {
+			text-align: center;
+			font-family: 'Noto Sans', sans-serif;
+			background-color: #1A120B;
+			color: #D5CEA3;
+		}
+		.box {
+			position: relative;
+			width: 100px;
+			height: 100px;
+			background-color: #3C2A21;
+			display: inline-block;
+			margin: 5px;
+			border-radius: 5px;
+			font-size: 60px;
+			line-height: 100px;
+			cursor: pointer;
+			transition: background-color 0.2s ease-in-out;
+		}
+		.box:hover {
+			background-color: #604A3E;
+		}
+		.box .mole {
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+		#score {
+			color: #E5E5CB;
+			font-size: 24px;
+			margin-top: 10px;
+		}
+	</style>
+</head>
+<body>
+	<h1>Wack-a-Mole Game</h1>
+	<p>Click on the moles as they appear!</p>
+	<div>
+		<div class="box" id="box1"></div>
+		<div class="box" id="box2"></div>
+		<div class="box" id="box3"></div>
+	</div>
+	<div>
+		<div class="box" id="box4"></div>
+		<div class="box" id="box5"></div>
+		<div class="box" id="box6"></div>
+	</div>
+	<div>
+		<div class="box" id="box7"></div>
+		<div class="box" id="box8"></div>
+		<div class="box" id="box9"></div>
+	</div>
+	<div id="score">Score: 0</div>
+	<script>
+		let score = 0;
+		let moles = [];
+
+		const scoreElement = document.getElementById("score");
+
+		const getRandomInt = (max) => {
+			return Math.floor(Math.random() * Math.floor(max));
+		};
+
+		const showMole = () => {
+			const box = document.getElementById("box" + getRandomInt(9));
+			box.innerHTML = "<span class='mole'>🦔</span>";
+			moles.push(box);
+			setTimeout(() => {
+				hideMole(box);
+			}, 1000);
+		};
+
+		const hideMole = (box) => {
+			box.innerHTML = "";
+			moles = moles.filter((mole) => mole !== box);
+		};
+
+		const whackMole = (event) => {
+			if (moles.includes(event.target.parentNode)) {
+				score++;
+				scoreElement.innerHTML = "Score: " + score;
+				hideMole(event.target.parentNode);
+			}
+		};
+
+		document.querySelectorAll(".box").forEach((box) => {
+			box.addEventListener("click", whackMole);
+		});
+
+		setInterval(() => {
+			if (moles.length < 3) {
+				showMole();
+			}
+		}, 1000);
+	</script>
+</body>
+</html>
